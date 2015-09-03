@@ -14,7 +14,7 @@ func (c *Collection) StyleLink(names ...string) template.HTML {
 	for _, name := range names {
 		g := c.Group(name)
 		if g.stylehash != "" {
-			if c.production {
+			if c.compiled {
 				html = html + StyleLink(g.StyleName())
 			} else {
 				for _, f := range g.Styles() {
@@ -39,7 +39,7 @@ func (c *Collection) ScriptLink(names ...string) template.HTML {
 	for _, name := range names {
 		g := c.Group(name)
 		if g.stylehash != "" {
-			if c.production {
+			if c.compiled {
 				html = html + ScriptLink(g.ScriptName())
 			} else {
 				for _, f := range g.Scripts() {

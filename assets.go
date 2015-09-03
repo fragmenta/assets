@@ -16,16 +16,16 @@ import (
 
 // Collection holds the complete list of groups
 type Collection struct {
-	production bool
-	path       string
-	groups     []*Group
+	compiled bool
+	path     string
+	groups   []*Group
 }
 
 // New returns a new assets.Collection
-func New(production bool) *Collection {
+func New(compiled bool) *Collection {
 	c := &Collection{
-		production: production,
-		path:       "secrets/assets.json",
+		compiled: compiled,
+		path:     "secrets/assets.json",
 	}
 	return c
 }
@@ -33,13 +33,7 @@ func New(production bool) *Collection {
 // Return the first asset file matching name - this assumes files have unique names between groups
 func (c *Collection) File(name string) *File {
 	for _, g := range c.groups {
-
-		//	fmt.Printf("COMPILED GROUP:%s %d\n", g.name, len(g.files))
-
 		for _, f := range g.files {
-
-			//	fmt.Printf("COMPILED FILE:%v %v\n", f.name, name)
-
 			if f.name == name {
 				return f
 			}
