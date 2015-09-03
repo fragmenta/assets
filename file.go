@@ -13,10 +13,8 @@ const permissions = 0744
 
 // File stores a filename and hash fingerprint for the asset file
 type File struct {
-	name string
-	hash string
-
-	// Used during compile phase
+	name  string
+	hash  string
 	path  string
 	bytes []byte
 }
@@ -91,6 +89,10 @@ func (f *File) Copy(dst string) error {
 		return err
 	}
 	return nil
+}
+
+func (f *File) LocalPath() string {
+	return f.path
 }
 
 func (f *File) AssetPath(dst string) string {

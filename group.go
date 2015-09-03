@@ -127,17 +127,20 @@ func (g *Group) ParseFile(p string, dst string) error {
 	}
 	g.files = append(g.files, file)
 
-	dstf := file.AssetPath(dst)
-	if file.Newer(dstf) {
+	// We no longer copy files to public in the compile step
+	// if dst not required remove it FIXME
+	/*	dstf := file.AssetPath(dst)
 
-		// Copy file over to assets folder in dst
-		err = file.Copy(dstf)
-		if err != nil {
-			return err
+		if file.Newer(dstf) {
+
+			// Copy file over to assets folder in dst
+			err = file.Copy(dstf)
+			if err != nil {
+				return err
+			}
+
 		}
-
-	}
-
+	*/
 	return nil
 }
 

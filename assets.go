@@ -30,13 +30,31 @@ func New(production bool) *Collection {
 	return c
 }
 
+// Return the first asset file matching name - this assumes files have unique names between groups
+func (c *Collection) File(name string) *File {
+	for _, g := range c.groups {
+
+		//	fmt.Printf("COMPILED GROUP:%s %d\n", g.name, len(g.files))
+
+		for _, f := range g.files {
+
+			//	fmt.Printf("COMPILED FILE:%v %v\n", f.name, name)
+
+			if f.name == name {
+				return f
+			}
+		}
+	}
+	return nil
+}
+
 func (c *Collection) Group(name string) *Group {
 	for _, g := range c.groups {
 		if g.name == name {
 			return g
 		}
 	}
-	return &Group{name: name}
+	return &Group{name: name} // Should this return nil instead?
 }
 
 // Group returns the named group if it exists, or creates it if not
@@ -136,11 +154,6 @@ func (c *Collection) Load() error {
 
 	}
 
-	// Sort files by name after load
-	for _, g := range c.groups {
-		sort.Sort(g.files)
-	}
-
 	return nil
 }
 
@@ -167,10 +180,14 @@ func (c *Collection) Compile(src string, dst string) error {
 
 	// For all our groups, compile them to one file, calculate global hash
 	for _, g := range c.groups {
+		// Sort files first for group
+		sort.Sort(g.files)
+
 		err := g.Compile(dst)
 		if err != nil {
 			return err
 		}
+
 	}
 
 	// Now save a representation of the groups/files to our json file
