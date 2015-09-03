@@ -6,7 +6,9 @@ import (
 	"github.com/fragmenta/assets/internal/cssmin"
 	"github.com/fragmenta/assets/internal/jsmin"
 	"io/ioutil"
+	"os"
 	"path"
+	"path/filepath"
 )
 
 // A sortable file array
@@ -48,6 +50,39 @@ func (g *Group) Scripts() []*File {
 	}
 
 	return scripts
+}
+
+// RemoveFiles removes old compiled files for this group from dst
+func (g *Group) RemoveFiles(dst string) error {
+
+	if dst == "" {
+		return fmt.Errorf("Empty destination string")
+	}
+
+	var assets []string
+
+	pattern := path.Join(dst, "assets", "scripts", g.name+"-*.min.js")
+	files, err := filepath.Glob(pattern)
+	if err != nil {
+		return err
+	}
+
+	assets = append(assets, files...)
+	pattern = path.Join(dst, "assets", "styles", g.name+"-*.min.css")
+	files, err = filepath.Glob(pattern)
+	if err != nil {
+		return err
+	}
+	assets = append(assets, files...)
+
+	for _, a := range assets {
+		err = os.Remove(a)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // CalculateAssetHashes calculates latest hashes given our files

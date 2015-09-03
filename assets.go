@@ -16,18 +16,23 @@ import (
 
 // Collection holds the complete list of groups
 type Collection struct {
-	compiled bool
-	path     string
-	groups   []*Group
+	compile bool
+	path    string
+	groups  []*Group
 }
 
 // New returns a new assets.Collection
-func New(compiled bool) *Collection {
+func New(compile bool) *Collection {
 	c := &Collection{
-		compiled: compiled,
-		path:     "secrets/assets.json",
+		compile: compile,
+		path:    "secrets/assets.json",
 	}
 	return c
+}
+
+// ServeCompiledAssets returns true if we should serve amalgamated compiled assets rather than separate asset files
+func (c *Collection) ServeCompiledAssets() bool {
+	return !c.compile
 }
 
 // Return the first asset file matching name - this assumes files have unique names between groups
@@ -174,6 +179,12 @@ func (c *Collection) Compile(src string, dst string) error {
 
 	// For all our groups, compile them to one file, calculate global hash
 	for _, g := range c.groups {
+
+		// Remove old compiled files for this group
+		err = g.RemoveFiles(dst)
+		if err != nil {
+			return err
+		}
 		// Sort files first for group
 		sort.Sort(g.files)
 
