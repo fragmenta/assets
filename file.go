@@ -45,11 +45,11 @@ func (f *File) Script() bool {
 	return strings.HasSuffix(f.name, ".js")
 }
 
-// MarshalJSON generates json for this collection, of the form {group:{file:hash}}
+// MarshalJSON generates json for this file, of the form {group:{file:hash}}
 func (f *File) MarshalJSON() ([]byte, error) {
 	var b bytes.Buffer
 
-	s := fmt.Sprintf("\"%s\":\"%s\"", f.name, f.hash)
+	s := fmt.Sprintf("\"%s\":\"%s\"", f.path, f.hash)
 	b.WriteString(s)
 
 	return b.Bytes(), nil

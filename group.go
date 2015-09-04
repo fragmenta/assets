@@ -147,8 +147,8 @@ func (g *Group) writeFiles(dst string, scriptWriter, styleWriter bytes.Buffer) e
 	return nil
 }
 
-func (g *Group) AddAsset(n, h string) {
-	file := &File{name: n, hash: h}
+func (g *Group) AddAsset(p, h string) {
+	file := &File{name: path.Base(p), path: p, hash: h}
 	g.files = append(g.files, file)
 }
 
@@ -162,20 +162,6 @@ func (g *Group) ParseFile(p string, dst string) error {
 	}
 	g.files = append(g.files, file)
 
-	// We no longer copy files to public in the compile step
-	// if dst not required remove it FIXME
-	/*	dstf := file.AssetPath(dst)
-
-		if file.Newer(dstf) {
-
-			// Copy file over to assets folder in dst
-			err = file.Copy(dstf)
-			if err != nil {
-				return err
-			}
-
-		}
-	*/
 	return nil
 }
 
