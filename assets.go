@@ -82,8 +82,6 @@ func (c *Collection) MarshalJSON() ([]byte, error) {
 
 	b.WriteString("}")
 
-	//	fmt.Printf("ASSETS:%s\n", b.String())
-
 	return b.Bytes(), nil
 }
 
@@ -124,8 +122,6 @@ func (c *Collection) Load() error {
 	if err != nil {
 		return fmt.Errorf("Error reading assets %s %v", c.path, err)
 	}
-
-	//	fmt.Printf("Loaded assets :%s\n", data)
 
 	// Walk through data groups, creating our groups from it
 	// or fetching existing ones

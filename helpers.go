@@ -3,6 +3,12 @@ package assets
 import (
 	"fmt"
 	"html/template"
+	"strings"
+)
+
+const (
+	styleTemplate  = `<link href="/assets/styles/%s" media="all" rel="stylesheet" type="text/css" />`
+	scriptTemplate = `<script src="/assets/scripts/%s" type="text/javascript" ></script>`
 )
 
 // Convert a set of group names to one style link tag (production)
@@ -56,10 +62,16 @@ func (c *Collection) ScriptLink(names ...string) template.HTML {
 }
 
 func StyleLink(name string) template.HTML {
-	return template.HTML(fmt.Sprintf("<link href=\"/assets/styles/%s\" media=\"all\" rel=\"stylesheet\" type=\"text/css\" />", template.URLQueryEscaper(name)))
+	if !strings.HasSuffix(name, ".css") {
+		name = name + ".css"
+	}
+	return template.HTML(fmt.Sprintf(styleTemplate, template.URLQueryEscaper(name)))
 }
 
 // Script inserts a script tag
 func ScriptLink(name string) template.HTML {
-	return template.HTML(fmt.Sprintf("<script src=\"/assets/scripts/%s\" type=\"text/javascript\"></script>", template.URLQueryEscaper(name)))
+	if !strings.HasSuffix(name, ".js") {
+		name = name + ".js"
+	}
+	return template.HTML(fmt.Sprintf(scriptTemplate, template.URLQueryEscaper(name)))
 }
