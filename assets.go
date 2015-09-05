@@ -4,14 +4,13 @@ package assets
 import (
 	"bytes"
 	"crypto/sha1"
-	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"path"
 	"path/filepath"
 	"sort"
-	"strings"
 )
 
 // Collection holds the complete list of groups
@@ -237,11 +236,6 @@ func collectAssets(src string, extensions []string) ([]string, error) {
 
 // bytesHash returns the sha hash of some bytes
 func bytesHash(bytes []byte) string {
-	//sum := sha256.Sum256(bytes)
 	sum := sha1.Sum(bytes)
-
-	// In golang 1.5, we can use RawURLEncoding, for now we trim padding
-	e := base64.URLEncoding
-	s := e.EncodeToString([]byte(sum[:]))
-	return strings.TrimRight(s, "=")
+	return hex.EncodeToString([]byte(sum[:]))
 }
