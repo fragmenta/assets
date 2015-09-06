@@ -204,6 +204,7 @@ func collectAssets(src string, extensions []string) ([]string, error) {
 
 	assets := []string{}
 
+	// TODO: perhaps use filepath.Walk instead
 	// filepath.Glob doesn't appear to support ** or {}
 	// this should catch
 	// src/app/images/img.png
