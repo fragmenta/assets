@@ -19,6 +19,7 @@ type File struct {
 	bytes []byte
 }
 
+// NewFile returns a new file object
 func NewFile(p string) (*File, error) {
 
 	// Load file from path to get bytes
@@ -37,10 +38,12 @@ func NewFile(p string) (*File, error) {
 	return file, nil
 }
 
+// Style returns true if this file is a CSS file
 func (f *File) Style() bool {
 	return strings.HasSuffix(f.name, ".css")
 }
 
+// Script returns true if this file is a js file
 func (f *File) Script() bool {
 	return strings.HasSuffix(f.name, ".js")
 }
@@ -91,10 +94,12 @@ func (f *File) Copy(dst string) error {
 	return nil
 }
 
+// LocalPath returns the relative path of this file
 func (f *File) LocalPath() string {
 	return f.path
 }
 
+// AssetPath returns the path of this file within the assets folder
 func (f *File) AssetPath(dst string) string {
 	folder := "styles"
 	if f.Script() {
@@ -103,6 +108,7 @@ func (f *File) AssetPath(dst string) string {
 	return path.Join(dst, "assets", folder, f.name)
 }
 
+// String returns a string representation of this object
 func (f *File) String() string {
 	return fmt.Sprintf("%s:%s", f.name, f.hash)
 }

@@ -1,4 +1,4 @@
-// Compilation of assets in asset groups for web servers
+// Package assets provides asset compilation, concatenation and fingerprinting.
 package assets
 
 import (
@@ -12,6 +12,8 @@ import (
 	"path/filepath"
 	"sort"
 )
+
+// TODO: remove assumptions about location of assets.json file - this should be configurable
 
 // Collection holds the complete list of groups
 type Collection struct {
@@ -29,7 +31,7 @@ func New(compiled bool) *Collection {
 	return c
 }
 
-// Return the first asset file matching name - this assumes files have unique names between groups
+// File returns the first asset file matching name - this assumes files have unique names between groups
 func (c *Collection) File(name string) *File {
 	for _, g := range c.groups {
 		for _, f := range g.files {
@@ -41,6 +43,7 @@ func (c *Collection) File(name string) *File {
 	return nil
 }
 
+// Group returns the named group if it exists or an empty group if not
 func (c *Collection) Group(name string) *Group {
 	for _, g := range c.groups {
 		if g.name == name {
@@ -50,7 +53,7 @@ func (c *Collection) Group(name string) *Group {
 	return &Group{name: name} // Should this return nil instead?
 }
 
-// Group returns the named group if it exists, or creates it if not
+// FetchOrCreateGroup returns the named group if it exists, or creates it if not
 func (c *Collection) FetchOrCreateGroup(name string) *Group {
 	for _, g := range c.groups {
 		if g.name == name {
@@ -199,7 +202,7 @@ func (c *Collection) Compile(src string, dst string) error {
 	return nil
 }
 
-// Collect the assets with this extension under src
+// collectAssets collects the assets with this extension under src
 func collectAssets(src string, extensions []string) ([]string, error) {
 
 	assets := []string{}

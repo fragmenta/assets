@@ -85,8 +85,8 @@ func (g *Group) RemoveFiles(dst string) error {
 	return nil
 }
 
-// CalculateAssetHashes calculates latest hashes given our files
-// This is called after compiling individual assets
+// Compile compiles all our files and calculates hashes from their contents
+// The group hash is a hash of hashes
 func (g *Group) Compile(dst string) error {
 	var scriptHashes, styleHashes string
 	var scriptWriter, styleWriter bytes.Buffer
@@ -147,6 +147,7 @@ func (g *Group) writeFiles(dst string, scriptWriter, styleWriter bytes.Buffer) e
 	return nil
 }
 
+// AddAsset adds this asset to the group
 func (g *Group) AddAsset(p, h string) {
 	file := &File{name: path.Base(p), path: p, hash: h}
 	g.files = append(g.files, file)
@@ -165,22 +166,27 @@ func (g *Group) ParseFile(p string, dst string) error {
 	return nil
 }
 
+// String returns a string represention of group
 func (g *Group) String() string {
 	return fmt.Sprintf("%s:%d", g.name, len(g.files))
 }
 
+// StyleName returns a fingerprinted group name for styles
 func (g *Group) StyleName() string {
 	return fmt.Sprintf("%s-%s.min.css", g.name, g.stylehash)
 }
 
+// StylePath returns a fingerprinted group path for styles
 func (g *Group) StylePath(dst string) string {
 	return path.Join(dst, "assets", "styles", g.StyleName())
 }
 
+// ScriptName returns a fingerprinted group name for scripts
 func (g *Group) ScriptName() string {
 	return fmt.Sprintf("%s-%s.min.js", g.name, g.scripthash)
 }
 
+// ScriptPath returns a fingerprinted group path for scripts
 func (g *Group) ScriptPath(dst string) string {
 	return path.Join(dst, "assets", "scripts", g.ScriptName())
 }
