@@ -234,6 +234,10 @@ func collectAssets(src string, extensions []string) ([]string, error) {
 		assets = append(assets, files...)
 	}
 
+	for idx := range assets {
+		assets[idx] = filepath.ToSlash(assets[idx])
+	}
+
 	return assets, nil
 
 }
